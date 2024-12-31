@@ -8,7 +8,9 @@ import reactor.core.publisher.Mono;
 public interface ClienteService {
 
     Mono<ClienteDTO> obtenerCliente(Long id);
-    Mono<ClienteDTO> crearCliente(Cliente cliente);
-    Mono<ClienteDTO> actualizarCliente(Long id, Cliente cliente);
+    Mono<Cliente> crearCliente(Cliente cliente);
+    Mono<Cliente> actualizarCliente(Long id, Cliente cliente);
     Mono<Void> eliminarCliente(Long id);
+
+    Mono<Cliente> obtenerClientePorId(Long id);
 }

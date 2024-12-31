@@ -17,4 +17,6 @@ public class FacturaDTO {
     private Cliente cliente;
 
 
+    public FacturaDTO(Long id, LocalDate fecha, Double total, Long id1) {
+    }
 }

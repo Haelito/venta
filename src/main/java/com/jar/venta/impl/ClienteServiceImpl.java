@@ -1,58 +1,49 @@
 package com.jar.venta.impl;
 
-import com.jar.venta.service.ClienteService;
 import com.jar.venta.dto.ClienteDTO;
 import com.jar.venta.model.Cliente;
 import com.jar.venta.repository.ClienteRepository;
+import com.jar.venta.service.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
-    private final ClienteRepository clienteRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-    // Constructor
     public ClienteServiceImpl(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
     }
 
     @Override
     public Mono<ClienteDTO> obtenerCliente(Long id) {
-        return clienteRepository.findById(id)  // Busca el cliente por ID
-                .map(cliente -> new ClienteDTO(  // Mapea la entidad Cliente a ClienteDTO
-                        cliente.getId(),
-                        cliente.getNombre(),
-                        cliente.getDireccion(),
-                        cliente.getTelefono(),
-                        cliente.getEmail()
-                ));
+        return null;
     }
 
     @Override
-    public Mono<ClienteDTO> crearCliente(Cliente cliente) {
-        return clienteRepository.save(cliente)
-                .map(c -> new ClienteDTO(c.getId(), c.getNombre(), c.getDireccion(), c.getTelefono(), c.getEmail()));
+    public Mono<Cliente> crearCliente(Cliente cliente) {
+        return clienteRepository.save(cliente); // `Mono<Cliente>` para operación reactiva
     }
 
     @Override
-    public Mono<ClienteDTO> actualizarCliente(Long id, Cliente cliente) {
-        return clienteRepository.findById(id)
-                .flatMap(existingCliente -> {
-                    existingCliente.setNombre(cliente.getNombre());
-                    existingCliente.setDireccion(cliente.getDireccion());
-                    existingCliente.setTelefono(cliente.getTelefono());
-                    existingCliente.setEmail(cliente.getEmail());
-                    return clienteRepository.save(existingCliente)
-                            .map(c -> new ClienteDTO(c.getId(), c.getNombre(), c.getDireccion(), c.getTelefono(), c.getEmail()));
-                })
-                .switchIfEmpty(Mono.empty());  // Si el cliente no existe, devuelve un Mono vacío
+    public Mono<Cliente> obtenerClientePorId(Long id) {
+        return clienteRepository.findById(id); // `Mono<Cliente>` para obtener un cliente por ID
     }
 
     @Override
     public Mono<Void> eliminarCliente(Long id) {
+        return clienteRepository.deleteById(id); // `Mono<Void>` para eliminar cliente
+    }
+
+    @Override
+    public Mono<Cliente> actualizarCliente(Long id, Cliente cliente) {
         return clienteRepository.findById(id)
-                .flatMap(existingCliente -> clienteRepository.delete(existingCliente))
-                .then();
+                .flatMap(existingCliente -> {
+                    existingCliente.setNombre(cliente.getNombre());
+                    existingCliente.setId(cliente.getId());
+                    return clienteRepository.save(existingCliente);
+                });
     }
 }
