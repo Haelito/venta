@@ -17,11 +17,4 @@ public class FacturaDTO {
     private Cliente cliente;
 
 
-    // Constructor
-    public FacturaDTO(Long id, LocalDate fecha, Double total, Long clienteId) {
-        this.id = id;
-        this.fecha = fecha;
-        this.total = total;
-        this.clienteId = clienteId;
-    }
 }
