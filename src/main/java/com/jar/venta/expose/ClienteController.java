@@ -1,4 +1,4 @@
-package com.jar.venta.controller;
+package com.jar.venta.expose;
 
 import com.jar.venta.model.Cliente;
 import com.jar.venta.service.ClienteService;
